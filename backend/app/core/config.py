@@ -40,6 +40,14 @@ class Settings(BaseSettings):
 
     model_dir: str = "/app/ml_models"
     default_model_tier: int = 2
+    auto_train_if_missing: bool = True
+    dataset_path: str = ""
+    train_on_start_epochs: int = 5
+    train_on_start_batch_size: int = 16
+    efficientnetv2b3_weights: str = "retinaiq_efficientnetv2b3.h5"
+    efficientnetb0_weights: str = "retinaiq_efficientnetb0.h5"
+    mobilenetv3_weights: str = "retinaiq_mobilenetv3.h5"
+    densenet121_weights: str = "retinaiq_densenet121.h5"
     image_quality_threshold: int = 40
     max_upload_size_mb: int = 20
 
