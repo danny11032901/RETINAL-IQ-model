@@ -1,37 +1,53 @@
-# RetinaIQ
+# RetinaIQ — DR Grading Model
 
-Explainable Deep Learning Framework for Automated Diabetic Retinopathy Screening.
+5-class diabetic retinopathy grading (No DR → Proliferative DR) using transfer learning.
 
-## Quick Start
-
-1. Copy `.env.example` to `.env`.
-2. Set `DATASET_PATH` in `.env` to your APTOS-style dataset folder containing:
-	- `train.csv`
-	- `train_images/` (or `images/`)
-3. Run:
+## Setup
 
 ```bash
-docker-compose up --build
+pip install -r requirements.txt
 ```
 
-## Auto Training (No Manual Weight Steps)
+## Dataset Format (APTOS-style)
 
-If `AUTO_TRAIN_IF_MISSING=true` and the primary weight file is missing, backend startup will:
+```
+<dataset_path>/
+    train.csv          # columns: id_code, diagnosis (0-4)
+    train_images/      # or images/
+        <id_code>.png
+        ...
+```
 
-1. Read `DATASET_PATH`
-2. Run `backend/ml_models/train.py`
-3. Save weights to `MODEL_DIR/EFFICIENTNETV2B3_WEIGHTS`
-4. Load the trained weights automatically and start inference
+## Train
 
-This means you only need to configure the dataset path once; no manual training command is required.
+```bash
+python train.py --dataset_path /path/to/dataset
+```
 
-## Services
+Options:
+- `--model` — backbone: `efficientnetv2b3` (default), `efficientnetb0`, `mobilenetv3`, `densenet121`
+- `--epochs` — max epochs (default: 5)
+- `--batch_size` — default: 16
+- `--output` — weights output path (default: `ml_models/retinaiq_<model>.h5`)
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-- MinIO Console: http://localhost:9001
+Outputs saved to `ml_models/`:
+- `retinaiq_<model>.h5` — trained weights
+- `training_history.json` — per-epoch metrics + final test scores (loss, accuracy, AUC)
+
+## Evaluate
+
+```bash
+python evaluate.py --dataset_path /path/to/dataset --weights ml_models/retinaiq_efficientnetv2b3.h5
+```
+
+Options:
+- `--model` — must match the backbone used during training (default: `efficientnetv2b3`)
+- `--batch_size` — default: 16
+
+Outputs saved to `ml_models/evaluation/`:
+- `metrics.json` — accuracy, AUC (macro OvR), F1-macro, QWK
+- `confusion_matrix.png` — confusion matrix heatmap
 
 ## Medical Disclaimer
 
-This output is AI-generated and must be reviewed by a qualified ophthalmologist before any clinical decision.
+AI-generated output must be reviewed by a qualified ophthalmologist before any clinical decision.
