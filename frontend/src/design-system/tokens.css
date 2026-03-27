@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg-void: #060A14;
+  --bg-base: #0A0F1E;
+  --bg-surface: #0F1829;
+  --bg-card: #152038;
+  --bg-input: #111E33;
+  --accent-primary: #00D4AA;
+  --accent-bright: #00F5C8;
+  --accent-glow: rgba(0, 212, 170, 0.12);
+  --text-primary: #EEF2FF;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
